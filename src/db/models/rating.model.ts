@@ -1,6 +1,6 @@
-import {Schema, model} from 'mongoose';
+import {Schema} from 'mongoose';
 
-const RatingSchema = new Schema({
+export let RatingSchema = new Schema({
     rating: {
         type: Number,
         min: [1, 'Rating between 1-5'],
@@ -8,5 +8,3 @@ const RatingSchema = new Schema({
     },
     user: String
 });
-
-export let rating = RatingSchema;

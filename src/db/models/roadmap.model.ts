@@ -1,4 +1,6 @@
 import {Schema, model} from 'mongoose';
+import {RatingSchema} from "./rating.model";
+import * as _ from 'lodash';
 
 
 const RoadmapStepSchema = new Schema({
@@ -25,11 +27,18 @@ const RoadmapSchema = new Schema({
     },
     isActive: Boolean,
     versions: [RoadmapVersionSchema],
-    ratings: []
+    ratings: {
+        type: [RatingSchema],
+        default: []
+    }
 });
 
 RoadmapSchema.virtual('steps').get(function() {
     return this.versions.pop().steps;
+});
+
+RoadmapSchema.virtual('rating').get(function() {
+    return _.sum(this.ratings.map(item => item.rating)) / this.ratings.length;
 });
 
 export let Roadmap = model('Roadmap', RoadmapSchema);
