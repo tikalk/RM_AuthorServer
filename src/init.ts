@@ -1,3 +1,5 @@
+declare const process: any;
+
 
 import {DB} from './db/db';
 import * as express from 'express';
@@ -16,7 +18,7 @@ export function init(modules) {
 
     DB();
 
-    app.listen(env., () => console.log('\n\n\napi server is live\n\n\n'));
+    app.listen(process.env.PORT || 3000, () => console.log('\n\n\napi server is live\n\n\n'));
 }
 
 function allowOrigin(app) {
