@@ -1,4 +1,4 @@
-import {create, getItem, getList} from './author.controller';
+import {create, getItem, getList, getUserRating, rateRoadmap} from './author.controller';
 
 const SERVICE_URI_PREFIX = '/authors';
 const SERVICE_ITEM_URI = SERVICE_URI_PREFIX + '/:authorId';
@@ -11,6 +11,6 @@ export function AuthorModule(app) {
         .post(SERVICE_ITEM_URI, create)
     //     .put(SERVICE_ITEM_URI, edit)
     //     .delete(SERVICE_ITEM_URI, remove)
-    //     .get(SERVICE_ITEM_URI + '/rating', getUserRating)
-    //     .post(SERVICE_ITEM_URI + '/rating', rateRoadmap)
+        .get(SERVICE_ITEM_URI + '/rating', getUserRating)
+        .post(SERVICE_ITEM_URI + '/rating', rateRoadmap)
 }
