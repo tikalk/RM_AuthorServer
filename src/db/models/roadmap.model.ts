@@ -41,4 +41,8 @@ RoadmapSchema.virtual('rating').get(function() {
     return _.sum(this.ratings.map(item => item.rating)) / this.ratings.length;
 });
 
+RoadmapSchema.virtual('votersAmount').get(function() {
+    return this.ratings.length;
+});
+
 export let Roadmap = model('Roadmap', RoadmapSchema);
