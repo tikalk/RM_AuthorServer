@@ -3,11 +3,11 @@
  */
 import * as express from 'express'
 import rmRouter from './routes/RoadmapRoutes'
+import {Roadmap} from './db/models/roadmap.model';
 
 import * as bodyParser from 'body-parser'
 import * as _ from 'lodash'
-import * as mongoose from 'mongoose'
-mongoose.connect('mongodb://tikal:123123@ds153682.mlab.com:53682/tikal-roadmap');
+
 import * as winston from 'winston'
 const port: number = 8080
 
@@ -17,17 +17,6 @@ app.listen(port);
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
-const roadmap = mongoose.model('roadmap', {
-    title: String,
-    stepResources: String,
-    exercise: String,
-    testFile: String,
-    version: String,
-    author: String,
-    isActive: Boolean
-});
-
 
 
 app.get('/', (req:express.Request, res: express.Response) => {
@@ -40,7 +29,7 @@ app.post('/createItem', function (req, res, next){
         console.log('request from client did not arrive correctly')
         res.status(404).send('Error, request from client not valid')
     }
-    const roadmapItem = new roadmap({
+    const roadmapItem = new Roadmap({
         title: String,
         stepResources: String,
         exercise: String,
@@ -58,7 +47,6 @@ app.post('/createItem', function (req, res, next){
             res.status(201).send('Item successfully added to mongo')
         }
     });
-
 })
 
 app.use('/roadmaps/', rmRouter)
