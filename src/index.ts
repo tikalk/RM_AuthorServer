@@ -3,6 +3,8 @@
  */
 import * as express from 'express'
 import * as mongo from 'mongodb'
+import rmRouter from './routes/RoadmapRoutes'
+
 const mongoDb = mongo.MongoClient;
 const url = "mongodb://tikal:123123@ds153682.mlab.com:53682/tikal-roadmap";
 
@@ -38,4 +40,5 @@ app.get('/', (req:express.Request, res: express.Response) => {
     res.send('Hello world!')
 })
 
+app.use('/roadmaps/', rmRouter)
 winston.info(`Server started on port ${port}`)
