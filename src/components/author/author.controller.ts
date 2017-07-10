@@ -1,33 +1,43 @@
 import {Author} from '../../db/models/author.model';
 import * as _ from 'lodash';
 
-// export function create(req, res) {
-//
-//     let roadmap = new Author(req.body);
-//
-//     roadmap.save((err, roadmap) => {
-//         res
-//             .status(err ? 400 : 200)
-//             .jsonp(err ? {err} : getLeanItem(roadmap));
-//     });
-// }
-//
-// export function getList(req, res) {
-//
-//     let query = <any>_.get(req, 'query', {});
-//
-//     if(query.q) {
-//         query.title = new RegExp(query.q, 'i');
-//         delete query.q;
-//     }
-//
-//     Author
-//         .find(query)
-//         .select('-versions')
-//         .exec(
-//             (err, list) => {
-//                 res.jsonp(list.toObject({virtuals: true}).map(getLeanItem));
-//             },
-//             err => res.status(400).jsonp({err})
-//         );
-// }
+export function create(req, res) {
+
+    let author = new Author({
+        user: req.userId
+    });
+
+    author.save((err, author) => {
+        res
+            .status(err ? 400 : 200)
+            .jsonp(err ? {err} : author);
+    });
+}
+
+export function getItem(req, res) {
+
+    Author
+        .find({user: req.userId})
+        .exec(
+            (err, list) => {
+                console.log('found author by userId: ', list)
+                res.jsonp(list);
+            },
+            err => res.status(400).jsonp({err})
+        );
+}
+
+export function getList(req, res) {
+
+    Author
+        .find({})
+        .exec(
+            (err, list) => {
+                console.log('found authors: ', list)
+                res.jsonp(list);
+            },
+            err => res.status(400).jsonp({err})
+        );
+}
+
+
