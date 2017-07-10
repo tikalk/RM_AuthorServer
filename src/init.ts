@@ -34,7 +34,7 @@ function allowOrigin(app) {
 
 function authMiddleware(app) {
     app.use(function (req, res, next) {
-        res.userid = '0';
+        res.userId = '0';
         next();
     });
 }
