@@ -12,7 +12,7 @@ pipeline
     {
         docker
         {
-            image 'node'
+            image '329054710135.dkr.ecr.eu-west-2.amazonaws.com/k8s-fuze:1'
         }
     }
     stages
