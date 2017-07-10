@@ -10,7 +10,7 @@ pipeline
     }
     agent
     {
-        label "linux-host-slave"
+        label: "linux-host-slave"
     }
     stages
     {
@@ -32,14 +32,14 @@ pipeline
         {
             steps
             {
-                sh("docker build -t rm_authorservice .")
+                sh("docker build -t 329054710135.dkr.ecr.eu-central-1.amazonaws.com/rm_authorserver .")
             }
         }
         stage('Docker Push')
         {
             steps
             {
-                sh("docker push 329054710135.dkr.ecr.eu-central-1.amazonaws.com/rm_authorservice:latest")
+                sh("docker push 329054710135.dkr.ecr.eu-central-1.amazonaws.com/rm_authorserver:latest")
             }
         }
     }
