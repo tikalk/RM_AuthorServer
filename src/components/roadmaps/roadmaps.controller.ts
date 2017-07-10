@@ -34,7 +34,7 @@ function responseRoadmap(query, res) {
         .select('-versions')
         .exec(
             (err, list) => {
-                res.jsonp(list.toObject({virtuals: true}).map(getLeanItem));
+                res.jsonp(list.map(getLeanItem));
             },
             err => res.status(400).jsonp({err})
         );
