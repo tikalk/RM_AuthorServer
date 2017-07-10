@@ -1,6 +1,6 @@
 import {create, getItem, getList} from './author.controller';
 
-const SERVICE_URI_PREFIX = '/author';
+const SERVICE_URI_PREFIX = '/authors';
 const SERVICE_ITEM_URI = SERVICE_URI_PREFIX + '/:authorId';
 
 
