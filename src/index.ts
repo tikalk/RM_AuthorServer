@@ -3,6 +3,7 @@
  */
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
+import * as winston from 'winston'
 const port: number = 8080
 
 const app = express()
@@ -16,4 +17,4 @@ app.get('/', (req:express.Request, res: express.Response) => {
     res.send('Hello world!')
 })
 
-console.log(`Server started on port ${port}`)
+winston.info(`Server started on port ${port}`)
