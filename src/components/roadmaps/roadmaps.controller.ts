@@ -1,5 +1,6 @@
 import {Roadmap} from '../../db/models/roadmap.model';
 import * as _ from 'lodash';
+import {Author} from "../../db/models/author.model";
 
 function getLeanItem(item) {
     let data = item.toObject({virtuals: true});
@@ -10,12 +11,12 @@ function getLeanItem(item) {
 }
 
 function setNewVersion(roadmap, steps) {
-    if(!_.isArray(steps)) return;
-    if(_.isEqual(roadmap.toObject().steps, steps)) return;
+    if (!_.isArray(steps)) return;
+    if (_.isEqual(roadmap.toObject().steps, steps)) return;
 
     let lastVersion;
 
-    if(!_.isArray(roadmap.versions)) {
+    if (!_.isArray(roadmap.versions)) {
         lastVersion = Number(roadmap.versions.pop().version);
     } else {
         roadmap.versions = [];
@@ -25,6 +26,18 @@ function setNewVersion(roadmap, steps) {
         version: (lastVersion + 1).toFixed(),
         steps
     });
+}
+
+function responseRoadmap(query, res) {
+    Roadmap
+        .find(query)
+        .select('-versions')
+        .exec(
+            (err, list) => {
+                res.jsonp(list.map(getLeanItem));
+            },
+            err => res.status(400).jsonp({err})
+        );
 }
 
 export function create(req, res) {
@@ -43,26 +56,29 @@ export function getList(req, res) {
 
     let query = <any>_.get(req, 'query', {});
 
-    if(query.q) {
+    if (query.q) {
         query.title = new RegExp(query.q, 'i');
         delete query.q;
     }
-
-    Roadmap
-        .find(query)
-        .select('-versions')
-        .exec(
-            (err, list) => {
-                res.jsonp(list.toObject({virtuals: true}).map(getLeanItem));
-            },
-            err => res.status(400).jsonp({err})
-        );
+    if (query.user) {
+        Author.findOne({user: req.user})
+            .select('_id')
+            .exec(
+                (err, author) => {
+                    query.author = author._id;
+                    responseRoadmap(query, res);
+                },
+                err => res.status(400).jsonp({err})
+            );
+    } else {
+        responseRoadmap(query, res);
+    }
 }
 
 export function remove(req, res) {
     Roadmap.findById(req.params.roadmapId)
         .exec((err, roadmap) => {
-            if(err) {
+            if (err) {
                 return res.json(400).json({err: new Error('Roadmap not found')});
             } else {
                 roadmap.remove((err) => {
@@ -86,7 +102,7 @@ export function getItem(req, res) {
 export function edit(req, res) {
     Roadmap.findById(req.params.roadmapId)
         .exec((err, roadmap) => {
-            if(err) {
+            if (err) {
                 return res.json(400).json({err: new Error('Roadmap not found')});
             } else {
 
@@ -113,7 +129,7 @@ export function rateRoadmap(req, res) {
                     .filter(rating => rating.user === req.userId)
                     .shift();
 
-                if(rating) {
+                if (rating) {
                     rating.rating = req.body.rating;
                 } else {
                     rating = {
@@ -134,7 +150,6 @@ export function rateRoadmap(req, res) {
             err => res.status(400).jsonp({err})
         );
 }
-
 
 export function getUserRating(req, res) {
     Roadmap
