@@ -11,19 +11,26 @@ function getLeanItem(item) {
 
 function setNewVersion(roadmap, steps) {
     if(!_.isArray(steps)) return;
-    if(_.isEqual(roadmap.steps.toObject(), steps)) return;
+    if(_.isEqual(roadmap.toObject().steps, steps)) return;
 
-    let lastVersion = roadmap.versions.pop();
+    let lastVersion;
 
+    if(!_.isArray(roadmap.versions)) {
+        lastVersion = Number(roadmap.versions.pop().version);
+    } else {
+        roadmap.versions = [];
+        lastVersion = 0;
+    }
     roadmap.versions.push({
-        version: (Number(lastVersion.version) + 1).toFixed(),
+        version: (lastVersion + 1).toFixed(),
         steps
     });
 }
 
 export function create(req, res) {
 
-    let roadmap = new Roadmap(req.body);
+    let roadmap = new Roadmap(_.pick(req.body, ['title', 'stepResources', 'exercise', 'testFile', 'isActive']));
+    setNewVersion(roadmap, req.body.steps);
 
     roadmap.save((err, roadmap) => {
         res
