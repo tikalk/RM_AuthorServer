@@ -1,4 +1,5 @@
 import {Schema, model} from 'mongoose';
+import {RatingSchema} from "./rating.model";
 
 
 const RoadmapStepSchema = new Schema({
@@ -25,7 +26,7 @@ const RoadmapSchema = new Schema({
     },
     isActive: Boolean,
     versions: [RoadmapVersionSchema],
-    ratings: []
+    ratings: [RatingSchema]
 });
 
 RoadmapSchema.virtual('steps').get(function() {
