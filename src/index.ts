@@ -2,13 +2,12 @@
  * Created by robertferentz on 10/07/17.
  */
 import * as express from 'express'
-import * as mongo from 'mongodb'
 import rmRouter from './routes/RoadmapRoutes'
 
-const mongoDb = mongo.MongoClient;
-const url = "mongodb://tikal:123123@ds153682.mlab.com:53682/tikal-roadmap";
-
 import * as bodyParser from 'body-parser'
+import * as _ from 'lodash'
+import * as mongoose from 'mongoose'
+mongoose.connect('mongodb://tikal:123123@ds153682.mlab.com:53682/tikal-roadmap');
 import * as winston from 'winston'
 const port: number = 8080
 
@@ -19,26 +18,49 @@ app.listen(port);
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-mongoDb.connect(url, function(err, db) {
-    if (err) throw err;
-    console.log("Database created!");
-    db.close();
+const roadmap = mongoose.model('roadmap', {
+    title: String,
+    stepResources: String,
+    exercise: String,
+    testFile: String,
+    version: String,
+    author: String,
+    isActive: Boolean
 });
 
-// mongoDb.connect(url, function(err, db) {
-//     if (err) throw err;
-//     const myobj = { name: "Company Inc", address: "Highway 37" };
-//     db.collection("customers").insertOne(myobj, function(err, res) {
-//         if (err) throw err;
-//         console.log("1 record inserted");
-//         db.close();
-//     });
-// });
 
 
 app.get('/', (req:express.Request, res: express.Response) => {
     res.send('Hello world!')
 })
 
+app.post('/createItem', function (req, res, next){
+    const item = _.get(req, 'req.body.item', '')
+    if (!item) {
+        console.log('request from client did not arrive correctly')
+        res.status(404).send('Error, request from client not valid')
+    }
+    const roadmapItem = new roadmap({
+        title: String,
+        stepResources: String,
+        exercise: String,
+        testFile: String,
+        version: String,
+        author: String,
+        isActive: Boolean
+    });
+    roadmapItem.save(function (err) {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error on mongo request')
+        } else {
+            console.log('item added to roadmap collection on mongo');
+            res.status(201).send('Item successfully added to mongo')
+        }
+    });
+
+})
+
+console.log(`Server started on port ${port}`)
 app.use('/roadmaps/', rmRouter)
 winston.info(`Server started on port ${port}`)
