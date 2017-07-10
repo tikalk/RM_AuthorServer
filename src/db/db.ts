@@ -1,5 +1,6 @@
 import {connect} from 'mongoose';
+import './models/roadmap.model';
 
-import {Roadmap} from './models/roadmap.model';
-
-connect('mongodb://tikal:123123@ds153682.mlab.com:53682/tikal-roadmap');
+export let DB = () =>  {
+    connect('mongodb://tikal:123123@ds153682.mlab.com:53682/tikal-roadmap');
+};
