@@ -12,7 +12,9 @@ const port: number = 8080
 const app = express();
 
 app.listen(port);
-const app = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 mongoDb.connect(url, function(err, db) {
     if (err) throw err;
@@ -30,10 +32,6 @@ mongoDb.connect(url, function(err, db) {
 //     });
 // });
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
-app.listen(port)
 
 app.get('/', (req:express.Request, res: express.Response) => {
     res.send('Hello world!')
