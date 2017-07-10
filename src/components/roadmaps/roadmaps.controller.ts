@@ -56,6 +56,13 @@ export function getList(req, res) {
 
     let query = <any>_.get(req, 'query', {});
 
+    // get bulk roadmaps
+    if(query.id) {
+       query.id = {
+           $in: [].concat(_.isArray(query.id) ? query.id : [query.id])
+       };
+    }
+
     if (query.q) {
         query.title = new RegExp(query.q, 'i');
         delete query.q;
