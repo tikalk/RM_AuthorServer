@@ -63,6 +63,8 @@ export function getList(req, res) {
        };
     }
 
+    query.isActive = (query.isActive === 'true');
+
     if (query.q) {
         query.title = new RegExp(query.q, 'i');
         delete query.q;
