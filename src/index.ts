@@ -2,9 +2,9 @@ import {init} from './init';
 
 // modules:
 import {RoadmapModule} from './components/roadmaps/roadmaps.module';
-import {RatingModule} from './components/ratings/rating.module';
+import {AuthorModule} from './components/author/author.module';
 
 init([
     RoadmapModule,
-    RatingModule
+    AuthorModule
 ]);
