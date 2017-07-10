@@ -32,7 +32,14 @@ pipeline
         {
             steps
             {
-                sh("docker build -t 329054710135.dkr.ecr.eu-central-1.amazonaws.com/rm_authorserver:${BUILD_ID} .")
+                sh("docker build -t 329054710135.dkr.ecr.eu-central-1.amazonaws.com/rm_authorserver .")
+            }
+        }
+        stage('Docker ECR Login')
+        {
+            steps
+            {
+                sh("eval '$(aws ecr get-login --no-include-email)'")
             }
         }
         stage('Docker Push')
@@ -42,6 +49,16 @@ pipeline
                 sh("docker push 329054710135.dkr.ecr.eu-central-1.amazonaws.com/rm_authorserver:latest")
             }
         }
+        stage ('Deploy to K8S') 
+        {
+            steps
+            {
+                sh(script: """
+                ./kubectl apply -f deployment.yaml --kubeconfig=\$(pwd)/kconfig --namespace fuze
+                ./kubectl get pods --namespace fuze -l app=contenteditor &> /dev/null
+                """, returnStatus: false, returnStdout: false)
+            }
+        }       
     }
     post
     {
