@@ -61,6 +61,7 @@ app.post('/createItem', function (req, res, next){
 
 })
 
-console.log(`Server started on port ${port}`)
 app.use('/roadmaps/', rmRouter)
+
+
 winston.info(`Server started on port ${port}`)
