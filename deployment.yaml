@@ -1,0 +1,18 @@
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: authorserver
+  namespace: fuze
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: authorserver
+    spec:
+      containers:
+      - name: contenteditor
+        image: 329054710135.dkr.ecr.eu-west-2.amazonaws.com/rm_authorserver:latest
+        ports:
+        - containerPort: 8080
