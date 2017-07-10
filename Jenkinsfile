@@ -10,7 +10,7 @@ pipeline
     }
     agent
     {
-        label: "linux-host-slave"
+        label "linux-host-slave"
     }
     stages
     {
