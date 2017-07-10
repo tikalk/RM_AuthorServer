@@ -11,8 +11,30 @@ class RoadmapRoutes {
 
     init(){
         this.router.get('/', (req, res) => {
-            res.send('hello roadmap routes')
+            res.json({
+                msg:'Road map list'
+            })
         })
+
+        this.router.put('/', (req, res) => {
+            res.json({
+                msg:'Road map updated'
+            })
+        })
+
+        this.router.post('/', (req, res) => {
+            res.json({
+                msg:'Road map added'
+            })
+        })
+
+        this.router.delete('/', (req, res) => {
+            res.json({
+                msg:'Road map added'
+            })
+        })
+
+
     }
 }
 
