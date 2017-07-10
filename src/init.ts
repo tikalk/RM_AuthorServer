@@ -14,6 +14,8 @@ export function init(modules) {
     // parse application/json
     app.use(bodyParser.json());
 
+    authMiddleware(app);
+
     modules.forEach(module => module(app));
 
     DB();
@@ -26,6 +28,13 @@ function allowOrigin(app) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+}
+
+function authMiddleware(app) {
+    app.use(function (req, res, next) {
+        res.userid = '0';
         next();
     });
 }
