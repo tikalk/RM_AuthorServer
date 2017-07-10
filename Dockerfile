@@ -6,8 +6,8 @@ WORKDIR /deploy
 
 # Install app dependencies
 COPY . /deploy
-RUN npm install typescript
-RUN npm install typings
+RUN npm install -g typescript
+RUN npm install -g typings
 RUN npm install
 RUN typings install
 
