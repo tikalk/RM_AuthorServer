@@ -1,7 +1,7 @@
 import {create, remove, getList, getItem} from './roadmaps.controller';
 
 const SERVICE_URI_PREFIX = '/roadmaps';
-const SERVICE_ITEM_URI = SERVICE_URI_PREFIX + '/roadmapId';
+const SERVICE_ITEM_URI = SERVICE_URI_PREFIX + '/:roadmapId';
 
 
 export function RoadmapModule(app) {
