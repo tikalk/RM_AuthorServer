@@ -19,9 +19,13 @@ const RoadmapSchema = new Schema({
     exercise: String,
     testFile: String,
     currentVersion: String,
-    author: String,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'Author'
+    },
     isActive: Boolean,
-    versions: [RoadmapVersionSchema]
+    versions: [RoadmapVersionSchema],
+    ratings: []
 });
 
 RoadmapSchema.virtual('steps').get(function() {

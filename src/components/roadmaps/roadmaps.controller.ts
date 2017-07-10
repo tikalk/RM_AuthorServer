@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 function getLeanItem(item) {
     let data = item.toObject({virtuals: true});
     delete data.versions;
+    delete data.ratings;
+
     return data;
 }
 
@@ -93,3 +95,54 @@ export function edit(req, res) {
         });
 }
 
+export function rateRoadmap(req, res) {
+    Roadmap
+        .findById(_.get(req, 'query.roadmapId'))
+        .select('ratings')
+        .exec(
+            (err, roadmap) => {
+                let rating = roadmap
+                    .ratings
+                    .filter(rating => rating.user === req.userId)
+                    .shift();
+
+                if(rating) {
+                    rating.rating = req.body.rating;
+                } else {
+                    rating = {
+                        user: req.userId,
+                        rating: req.query.rating
+                    };
+                    roadmap.ratings.push(rating);
+                }
+
+
+                roadmap.save((err) => {
+                    res
+                        .status(err ? 400 : 200)
+                        .jsonp(err ? {err} : rating);
+                });
+
+            },
+            err => res.status(400).jsonp({err})
+        );
+}
+
+
+export function getUserRating(req, res) {
+    Roadmap
+        .findById(_.get(req, 'query.roadmapId'))
+        .select('ratings')
+        .exec(
+            (err, roadmap) => {
+                const rating = _.extend({user: req.userId, rating: 0}, roadmap
+                    .ratings
+                    .filter(rating => rating.user === req.userId)
+                    .shift());
+
+                res.status(200).jsonp(rating);
+
+            },
+            err => res.status(400).jsonp({err})
+        );
+}
