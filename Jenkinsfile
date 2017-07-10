@@ -10,10 +10,7 @@ pipeline
     }
     agent
     {
-        docker
-        {
-            image '329054710135.dkr.ecr.eu-west-2.amazonaws.com/k8s-fuze:1'
-        }
+        label "linux-host-slave"
     }
     stages
     {
